@@ -4,7 +4,7 @@ clear;
 ms_dir='../PanSharpenDataSet/WV3_Rio_Tripoli/4bands_MS_tif';
 pan_dir='../PanSharpenDataSet/WV3_Rio_Tripoli/4bands_Pan_tif';
 save_ms_dir = strcat(ms_dir(1:end-4),'_chop');
-save_pan_dir = strcat(pan_dir(1:end-4), '_chop'); 
+save_pan_dir = strcat(pan_dir(1:end-4), '_chop');
 
 if ~exist(save_ms_dir, 'dir')
     mkdir(save_ms_dir);
@@ -13,10 +13,10 @@ if ~exist(save_pan_dir, 'dir')
     mkdir(save_pan_dir);
 end
 
-radiance_resolution = 2^11; 
+radiance_resolution = 2^11;
 SoM=256;
 SoP=256*4;
-files=dir(fullfile(ms_dir, '*.TIF')); 
+files=dir(fullfile(ms_dir, '*.TIF'));
 Num1 = length(files);
 % [Num1,Num2]=size(files);
 
@@ -24,9 +24,8 @@ Num1 = length(files);
 for t=2:Num1
 
     %%
-    %
     fprintf('processing the %d-th img \n',t);
-    strMS=fullfile(ms_dir,files(t).name); %     
+    strMS=fullfile(ms_dir,files(t).name); %
     strPan = fullfile(pan_dir, strrep(files(t).name, '-M', '-P'));
   
     OMS=imread(strMS);
@@ -70,7 +69,7 @@ for t=2:Num1
            
            for k=1:3
                M(:,:,k)=NMS(:,:,k)/max((max(NMS(:,:,k))));
-               M(:,:,k) = imadjust(M(:,:,k),stretchlim(M(:,:,k)),[0.1,0.9]);
+               M(:,:,k) = imadjust(M(:,:,k),stretchlim(M(:,:,k)),[0.01,0.99]);
            end
             imwrite(uint8(M*255),imagenameforMS1);
             clear imagenameforMS;
